@@ -12,25 +12,22 @@
 
 // O(n^2) - time complexity
 // O(1) - space complexity
-function bubbleSort(nums, stop = null) {
-  const stopIndex = stop || nums.length - 1;
-  let swapCount = 0;
+function bubbleSort(nums) {
+  let swap = false;
 
-  for (let i = 0; i < stopIndex; i++) {
-    const current = nums[i];
-    const next = nums[i + 1];
-    if (current > next) {
-      nums[i] = next;
-      nums[i + 1] = current;
-      swapCount += 1;
+  do {
+    swap = false;
+    for (let i = 0; i < nums.length - 1; i++) {
+      if (nums[i] > nums[i + 1]) {
+        const current = nums[i];
+        nums[i] = nums[i + 1];
+        nums[i + 1] = current;
+        swap = true;
+      }
     }
-  }
+  } while (swap);
 
-  if (swapCount > 0) {
-    return bubbleSort(nums, stopIndex - 1);
-  } else {
-    return nums;
-  }
+  return nums;
 }
 
 // unit tests
