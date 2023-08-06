@@ -10,12 +10,52 @@
 */
 
 function radixSort(array) {
-  // code goes here
+  // find longest number
+  const length = getLongestNumber(array);
+  // create buckets - an array of 10 arrays (bucket for 0 - 9)
+  const buckets = Array.from({ length: 10 }, () => []);
+  // iterate for length of longest number
+  for (let i = length; i>= 0; i--) {
+    while (array.length) {
+      const number = array.shift();
+      const digit = getDigit(number, i, length);
+      buckets[digit].push(number); 
+    }
+
+    for (let j = 0; j < buckets.length; j++) {
+      const bucket = buckets[j];
+
+      while (bucket.length) {
+        array.push(bucket.shift());
+      }
+    }
+  }
+
+  return array;
+}
+
+// number, place for the digit, and length of the longest number
+function getDigit(number, place, length) {
+  const digits = number.toString();
+  const diff = length - digits.length;
+  return digits[place - diff] || 0;
+}
+
+// returns the length of the longest number
+function getLongestNumber(array) {
+  let length = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    const currentLength = array[i].toString().length;
+    length = currentLength > length ? currentLength : length;
+  }
+
+  return length;
 }
 
 // unit tests
 // do not modify the below code
-describe.skip("radix sort", function () {
+describe("radix sort", function () {
   it("should sort correctly", () => {
     const nums = [
       20,
