@@ -31,50 +31,54 @@ class LinkedList {
   }
   push(value) {
     const node = new Node(value);
-    this.length++;
     if (!this.head) {
       this.head = node;
     } else {
       this.tail.next = node;
     }
     this.tail = node;
+    this.length++;
   }
   pop() {
     return this.delete(this.length - 1);
   }
   _find(index) {
-    if (index >= this.length) return null;
+    if (index < 0 || index >= this.length) return null;
+
+    // else
     let current = this.head;
     for (let i = 0; i < index; i++) {
       current = current.next;
     }
-
     return current;
   }
   get(index) {
     const node = this._find(index);
-    if (!node) return void 0;
-    return node.value;
+    if (node) return node.value;
+
+    return null;
   }
   delete(index) {
     if (index === 0) {
       const head = this.head;
       if (head) {
         this.head = head.next;
-      } else {
-        this.head = null;
-        this.tail = null;
       }
       this.length--;
       return head.value;
     }
 
     const node = this._find(index - 1);
-    const excise = node.next;
+    const excise = node && node.next;
+
     if (!excise) return null;
+
     node.next = excise.next;
-    if (!node.next) this.tail = node.next;
+    if (!(node.next && node.next.next)) {
+      this.tail = excise.next;
+    }
     this.length--;
+
     return excise.value;
   }
 }
